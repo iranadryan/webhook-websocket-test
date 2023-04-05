@@ -19,11 +19,9 @@ io.on('connection', (socket) => {
 });
 
 app.post('/hook', (req, res) => {
-  console.log('Body', req.body);
-
-  if (req.body.type === 'message') {
-    io.emit('newmessage', JSON.stringify(req.body));
-  }
+  console.log(`New ${req.body.type} arrived from webhook`);
+  
+  io.emit('newmessage', JSON.stringify(req.body));
 
   res.sendStatus(200);
 });
