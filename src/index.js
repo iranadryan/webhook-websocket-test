@@ -19,6 +19,8 @@ io.on('connection', (socket) => {
 });
 
 app.post('/hook', (req, res) => {
+  console.log('Body', req.body);
+
   if (req.body.type === 'message') {
     io.emit('newmessage', JSON.stringify(req.body));
   }
@@ -28,4 +30,4 @@ app.post('/hook', (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-})
+});
