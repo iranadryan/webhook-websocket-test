@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const wss = new WebSocketServer({
-  port: 8080,
+  noServer: true
 });
 
 let sockets = [];
@@ -22,12 +22,18 @@ wss.on('connection', (socket) => {
 app.post('/hook', (req, res) => {
   console.log(req.body);
   sockets.forEach((socket) => {
-    socket.send(req.body);
+    socket.send(JSON.stringify(req.body));
   })
   
   res.sendStatus(200);
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-})
+});
+
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, socket => {
+    wss.emit('connection', socket, request);
+  });
+});
