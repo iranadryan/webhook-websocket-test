@@ -1,39 +1,31 @@
 import express from 'express';
-import { WebSocketServer } from 'ws';
+import http from 'node:http';
+import { Server } from 'socket.io';
+
+const PORT = process.env.PORT || 3000;
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.use(express.json());
 
-const wss = new WebSocketServer({
-  noServer: true
-});
+io.on('connection', (socket) => {
+  console.log(`A new user connected: ${socket.id}`);
 
-let sockets = [];
-wss.on('connection', (socket) => {
-  sockets.push(socket);
-
-  socket.on('close', () => {
-    sockets = sockets.filter((s) => s !== socket);
+  socket.on('disconnect', () => {
+    console.log(`User disconnected: ${socket.id}`);
   })
 });
 
 app.post('/hook', (req, res) => {
-  console.log(req.body);
-  sockets.forEach((socket) => {
-    socket.send(JSON.stringify(req.body));
-  })
-  
+  if (req.body.type === 'message') {
+    io.emit('newmessage', JSON.stringify(req.body));
+  }
+
   res.sendStatus(200);
 });
 
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-});
-
-server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, socket => {
-    wss.emit('connection', socket, request);
-  });
-});
+})
