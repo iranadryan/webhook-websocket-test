@@ -11,7 +11,7 @@ moment.locale('pt-br');
 const conversations = [];
 const initTerms = ['oi', 'ola', 'olá', 'gsafra', 'iniciar'];
 
-export function chatbotWorkflow(body) {
+export async function chatbotWorkflow(body) {
   const userNumber = body.key.remoteJid.split('@')[0];
   const userName = body.pushName;
   const message = body.message.conversation.trim().toLowerCase();
