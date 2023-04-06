@@ -11,7 +11,7 @@ moment.locale('pt-br');
 const conversations = [];
 const initTerms = ['oi', 'ola', 'olá', 'gsafra', 'iniciar'];
 
-export async function chatbotWorkflow(body) {
+export async function chatbotWorkflow(body, socket) {
   const userNumber = body.key.remoteJid.split('@')[0];
   const userName = body.pushName;
   const message = body.message.conversation.trim().toLowerCase();
@@ -151,7 +151,7 @@ _Responda com o número referente ao que deseja_
       conversations[conversationIndex].report[2] = 'mes';
     }
 
-    io.emit('newreport', JSON.stringify({
+    socket.emit('newreport', JSON.stringify({
       userNumber,
       userName,
       report: conversations[conversationIndex].report
