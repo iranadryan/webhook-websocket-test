@@ -2,6 +2,8 @@ import express from 'express';
 import http from 'node:http';
 import { Server } from 'socket.io';
 
+import { chatbotWorkflow } from './workflows/chatbotWorkflow'
+
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -22,7 +24,7 @@ app.post('/hook', async (req, res) => {
   console.log(`New ${req.body.type} arrived from webhook`);
 
   if (req.body.type === 'message') {
-    console.log('É uma mensagem!');
+    chatbotWorkflow(req.body.body);
   }
 
   res.sendStatus(200);
