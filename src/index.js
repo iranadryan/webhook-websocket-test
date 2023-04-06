@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'node:http';
 import { Server } from 'socket.io';
 
-import { chatbotWorkflow } from './workflows/chatbotWorkflow'
+import { chatbotWorkflow } from './workflows/chatbotWorkflow.js'
 
 const PORT = process.env.PORT || 3000;
 
