@@ -152,7 +152,9 @@ _Responda com o número referente ao que deseja_
     }
 
     io.emit('newreport', JSON.stringify({
-
+      userNumber,
+      userName,
+      report: conversations[conversationIndex].report
     }));
 
     return await sendTextMessage(userNumber, `
