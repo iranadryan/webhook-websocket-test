@@ -24,7 +24,7 @@ app.post('/hook', async (req, res) => {
   console.log(`New ${req.body.type} arrived from webhook`);
 
   if (req.body.type === 'message') {
-    chatbotWorkflow(req.body.body);
+    await chatbotWorkflow(req.body.body);
   }
 
   res.sendStatus(200);
